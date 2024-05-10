@@ -1,0 +1,243 @@
+﻿<!DOCTYPE>
+<html>
+<head>
+    <title>HuddleCamHD Camera Control Pane</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        .btn-ctrl {
+            padding: 5px;
+            color: #6c757d;
+            font-size: 3rem;
+            text-align: center;
+        }
+
+            .btn-ctrl:hover {
+                background: #6c757d;
+                color: white;
+                cursor: pointer;
+            }
+
+        .alert-wrapper {
+            min-height: 50px;
+        }
+
+            .alert-wrapper .alert {
+                display: none;
+            }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="ptzctrlcheck" value="option1" checked="true" onclick="showHidePTZ()">
+                <label class="form-check-label" for="ptzctrlcheck">PTZ Control</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="presetsctrlcheck" value="option2" checked="true" onclick="showHidePresets()">
+                <label class="form-check-label" for="presetsctrlcheck">Presets Control</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-xs-12 col-sm-2">
+            </div>
+            <div class="col-md-6 col-xs-12 col-sm-8">
+                <div class="row pt-3 ptzctrl">
+                    <div class="col-4">
+
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onmousedown="enviarComando('up')" onmouseup="enviarComando('stop')">
+                            <i class="fa fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+
+                    </div>
+                </div>
+                <div class="row pt-3 ptzctrl">
+                    <div class="col-4">
+                        <div class="btn-ctrl" onmousedown="enviarComando('left')" onmouseup="enviarComando('stop')">
+                            <i class="fa fa-arrow-left"></i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('home')">
+                            <i class="fa fa-home"></i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onmousedown="enviarComando('right')" onmouseup="enviarComando('stop')">
+                            <i class="fa fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3 ptzctrl">
+                    <div class="col-4">
+                        <div class="btn-ctrl" onmousedown="enviarComando('zoomin')" onmouseup="enviarComando('stopzoom')">
+                            <i class="fa fa-search-plus"></i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onmousedown="enviarComando('down')" onmouseup="enviarComando('stop')">
+                            <i class="fa fa-arrow-down"></i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onmousedown="enviarComando('zoomout')" onmouseup="enviarComando('stopzoom')">
+                            <i class="fa fa-search-minus"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3 presetctrl">
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('preset1')">
+                            <i>1</i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('preset2')">
+                            <i>2</i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('preset3')">
+                            <i>3</i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3 presetctrl">
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('preset4')">
+                            <i>4</i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('preset5')">
+                            <i>5</i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('preset6')">
+                            <i>6</i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3 presetctrl">
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('preset7')">
+                            <i>7</i>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="btn-ctrl" onclick="enviarComando('preset8')">
+                            <i>8</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-xs-12 col-sm-2">
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+        $(document).ready(function() {
+            conectarWebSocket()
+});
+var socket;
+
+function conectarWebSocket() {
+    socket = new WebSocket('ws://localhost:8081/Commands'); // Substitua 'localhost:8080' pelo endereço do seu servidor WebSocket
+
+    socket.onopen = function(event) {
+        console.log('Conexão estabelecida com o servidor WebSocket.');
+    };
+
+    socket.onmessage = function(event) {
+        console.log('Mensagem recebida do servidor WebSocket:', event.data);
+        // Lógica para manipular a mensagem recebida, se necessário
+    };
+
+    socket.onclose = function(event) {
+        console.log('Conexão fechada com o servidor WebSocket.');
+    };
+}
+
+function desconectarWebSocket() {
+    if (socket) {
+        socket.close();
+        console.log('Conexão WebSocket encerrada.');
+    }
+}
+
+function enviarComando(comando) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(comando);
+    } else {
+        console.log('Erro: conexão WebSocket não está aberta.');
+    }
+}
+		/* zoom in/out */
+		function zoom(inOut)
+		{
+			enviarComando("zoom");
+		}
+
+		/* call preset */
+		function recall(preset)
+		{
+			enviarComando("recall");
+		}
+
+		function showAlert(str)
+		{
+			$("div.alert").text(str);
+			$("div.alert").fadeIn(1000);
+			setTimeout(function(){
+				$("div.alert").fadeOut(1000);
+			}, 1500);
+
+		}
+
+		function showHidePTZ()
+		{
+			if($("#ptzctrlcheck")[0].checked == true)
+			{
+				$(".ptzctrl").slideDown(1000);
+			}
+			else
+			{
+				$(".ptzctrl").slideUp(1000);
+			}
+
+		}
+
+		function showHidePresets()
+		{
+			if($("#presetsctrlcheck")[0].checked == true)
+			{
+				$(".presetctrl").slideDown(1000);
+			}
+			else
+			{
+				$(".presetctrl").slideUp(1000);
+			}
+		}
+
+		/* Ask the server about the connection status of the camera */
+		function checkConnectionStatus()
+		{
+
+		}
+
+		/* Start a timer that checkes the connection status every 1 sec */
+		setInterval(checkConnectionStatus, 1000);
+</script>
+</html>

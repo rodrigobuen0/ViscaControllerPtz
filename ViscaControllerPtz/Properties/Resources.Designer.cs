@@ -59,5 +59,23 @@ namespace ViscaControllerPtz.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE&gt;
+        ///&lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;title&gt;HuddleCamHD Camera Control Pane&lt;/title&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css&quot;&gt;
+        ///    &lt;link href=&quot;https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+        ///    &lt;script src=&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+        ///    &lt;script src=&quot;h [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string HTMLPage1 {
+            get {
+                return ResourceManager.GetString("HTMLPage1", resourceCulture);
+            }
+        }
     }
 }

@@ -566,6 +566,8 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = "Sony VISCA Control Protocol";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox4.ResumeLayout(false);

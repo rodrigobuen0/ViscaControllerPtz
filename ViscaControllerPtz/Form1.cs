@@ -9,17 +9,31 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports;
 using System.IO;
+using System.Net;
+using System.Threading;
+using WebSocketSharp.Server;
+using WebSocketSharp;
 
 namespace ViscaControllerPtz
 {
     public partial class Form1 : Form
     {
+        private HttpListener _listener;
+        private Thread _serverThread;
+
         //byte[] revBuff;
         public Form1()
         {
             string[] availablePorts = SerialPort.GetPortNames();
 
+            //Console.ReadKey(true);
+            //wssv.Stop();
             InitializeComponent();
+            _listener = new HttpListener();
+            var wssv = new WebSocketServer("ws://127.0.0.1:8081");
+            wssv.AddWebSocketService<MyWebSocketService>("/Commands");
+            wssv.Start();
+            _listener.Prefixes.Add("http://localhost:8080/");
             this.comboBox1.Items.AddRange(availablePorts);
             if (!string.IsNullOrEmpty(Properties.Settings.Default.PortaCom))
             {
@@ -57,6 +71,143 @@ namespace ViscaControllerPtz
 
 
         }
+        public class MyWebSocketService : WebSocketBehavior
+        {
+            protected override void OnMessage(MessageEventArgs e)
+            {
+                try
+                {
+                    byte[] bytesRecebidos = e.RawData;
+                    string jsonString = Encoding.UTF8.GetString(bytesRecebidos);
+
+                    Form1 form = Application.OpenForms["Form1"] as Form1;
+                    if (form != null)
+                        form.ProcessarMensagem(jsonString);
+                }
+                catch (Exception ex)
+                {
+                    Context.WebSocket.Close();
+                    MessageBox.Show($"ERRO: {ex.Message}");
+                    Context.WebSocket.Close();
+                }
+            }
+        }
+
+        public void ProcessarMensagem(string mensagem)
+        {
+            switch (mensagem)
+            {
+                case "stop":
+                    {
+                        ExecuteOnUIThread(() => PararMovimento());
+                    }
+                    break;
+                case "stopzoom":
+                    {
+                        ExecuteOnUIThread(() => PararMovimentoZoom());
+                    }
+                    break;
+                case "up":
+                    ExecuteOnUIThread(() => btnUp_MouseDown(null, null));
+                    break;
+                case "down":
+                    ExecuteOnUIThread(() => btnDown_MouseDown(null, null));
+                    break;
+                case "left":
+                    ExecuteOnUIThread(() => btnLeft_MouseDown(null, null));
+                    break;
+                case "right":
+                    ExecuteOnUIThread(() => btnRight_MouseDown(null, null));
+                    break;
+                case "home":
+                    ExecuteOnUIThread(() => button23_Click(null, null));
+                    break;
+                case "preset1":
+                    ExecuteOnUIThread(() => button13_Click(null, null));
+                    break;
+                case "preset2":
+                    ExecuteOnUIThread(() => button16_Click(null, null));
+                    break;
+                case "preset3":
+                    ExecuteOnUIThread(() => button15_Click(null, null));
+                    break;
+                case "preset4":
+                    ExecuteOnUIThread(() => button14_Click(null, null));
+                    break;
+                case "preset5":
+                    ExecuteOnUIThread(() => button20_Click(null, null));
+                    break;
+                case "preset6":
+                    ExecuteOnUIThread(() => button17_Click(null, null));
+                    break;
+                case "preset7":
+                    ExecuteOnUIThread(() => button18_Click(null, null));
+                    break;
+                case "preset8":
+                    ExecuteOnUIThread(() => button19_Click(null, null));
+                    break;
+                case "zoomin":
+                    ExecuteOnUIThread(() => btnZoomMais_MouseDown(null, null));
+                    break;
+                case "zoomout":
+                    ExecuteOnUIThread(() => btnZoomMenos_MouseDown(null, null));
+                    break;
+            }
+        }
+        private void ExecuteOnUIThread(Action action)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            _serverThread = new Thread(StartServer);
+            _serverThread.Start();
+        }
+
+        private void StartServer()
+        {
+            try
+            {
+                _listener.Start();
+                while (_listener.IsListening)
+                {
+                    HttpListenerContext context = _listener.GetContext();
+                    ProcessRequest(context);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao iniciar o servidor: " + ex.Message);
+            }
+        }
+
+        
+
+        private void ProcessRequest(HttpListenerContext context)
+        {
+            string responseString = Properties.Resources.HTMLPage1;
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
+            context.Response.ContentType = "text/html";
+            context.Response.ContentLength64 = buffer.Length;
+            context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+            context.Response.OutputStream.Close();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_listener != null && _listener.IsListening)
+            {
+                _listener.Stop();
+            }
+        }
+
         private void loadData()
         {
             this.comboBox1.Text = Properties.Settings.Default.PortaCom;
@@ -164,6 +315,12 @@ namespace ViscaControllerPtz
         private void PararMovimento()
         {
             byte[] buff_stop = { 0x81, 0x01, 0x06, 0x01, 0x00, 0x05, 0x03, 0x03, 0xff };
+            this.serialPort1.Write(buff_stop, 0, buff_stop.Length);
+            this.textBox1.Text = "Parado";
+        }
+        private void PararMovimentoZoom()
+        {
+            byte[] buff_stop = { 0x81, 0x01, 0x04, 0x07, 0x00, 0xff };
             this.serialPort1.Write(buff_stop, 0, buff_stop.Length);
             this.textBox1.Text = "Parado";
         }
