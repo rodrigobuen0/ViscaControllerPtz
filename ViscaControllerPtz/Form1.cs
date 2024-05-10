@@ -13,6 +13,7 @@ using System.Net;
 using System.Threading;
 using WebSocketSharp.Server;
 using WebSocketSharp;
+using ViscaControllerPtz.Properties;
 
 namespace ViscaControllerPtz
 {
@@ -20,15 +21,26 @@ namespace ViscaControllerPtz
     {
         private HttpListener _listener;
         private Thread _serverThread;
+        private NotifyIcon _notifyIcon;
+        private ContextMenuStrip _contextMenuStrip;
 
-        //byte[] revBuff;
         public Form1()
         {
             string[] availablePorts = SerialPort.GetPortNames();
 
-            //Console.ReadKey(true);
-            //wssv.Stop();
             InitializeComponent();
+            _notifyIcon = new NotifyIcon();
+            _notifyIcon.Icon = Properties.Resources.icon1;
+            _notifyIcon.Text = "Ptz Controller";
+            _notifyIcon.Visible = true;
+
+            _contextMenuStrip = new ContextMenuStrip();
+            _contextMenuStrip.Items.Add("Abrir", null, NotifyIcon_MouseDoubleClick);
+            _contextMenuStrip.Items.Add("Finalizar", null, CloseMenuItem_Click);
+
+            _notifyIcon.ContextMenuStrip = _contextMenuStrip;
+            _notifyIcon.MouseDoubleClick += NotifyIcon_MouseDoubleClick;
+
             _listener = new HttpListener();
             var wssv = new WebSocketServer("ws://127.0.0.1:8081");
             wssv.AddWebSocketService<MyWebSocketService>("/Commands");
@@ -92,7 +104,26 @@ namespace ViscaControllerPtz
                 }
             }
         }
+        private void CloseMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_listener != null && _listener.IsListening)
+            {
+                _listener.Stop();
+            }
+            Environment.Exit(0);
+        }
 
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+
+            this.Hide();
+        }
+        private void NotifyIcon_MouseDoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
         public void ProcessarMensagem(string mensagem)
         {
             switch (mensagem)
@@ -199,15 +230,6 @@ namespace ViscaControllerPtz
             context.Response.OutputStream.Write(buffer, 0, buffer.Length);
             context.Response.OutputStream.Close();
         }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (_listener != null && _listener.IsListening)
-            {
-                _listener.Stop();
-            }
-        }
-
         private void loadData()
         {
             this.comboBox1.Text = Properties.Settings.Default.PortaCom;
