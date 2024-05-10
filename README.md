@@ -1,4 +1,4 @@
-# Visca Controller PTZ for Windows
+# Visca PTZ Controller for Windows
 
 ViscaControllerPtz is a simple application for controlling PTZ (Pan-Tilt-Zoom) cameras using the VISCA protocol. It provides a user-friendly interface to send commands to PTZ cameras connected via serial port.
 
