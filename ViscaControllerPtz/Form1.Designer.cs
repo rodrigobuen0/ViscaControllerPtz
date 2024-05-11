@@ -72,6 +72,7 @@
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnMenu = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -121,6 +122,7 @@
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox2.Controls.Add(this.btnMenu);
             this.groupBox2.Controls.Add(this.btnDownLeft);
             this.groupBox2.Controls.Add(this.btnDownRight);
             this.groupBox2.Controls.Add(this.btnTopLeft);
@@ -548,6 +550,16 @@
             this.label3.TabIndex = 15;
             this.label3.Text = "TILT Speed";
             // 
+            // btnMenu
+            // 
+            this.btnMenu.Location = new System.Drawing.Point(213, 12);
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(85, 31);
+            this.btnMenu.TabIndex = 15;
+            this.btnMenu.Text = "MENU";
+            this.btnMenu.UseVisualStyleBackColor = true;
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -625,5 +637,6 @@
         private System.Windows.Forms.Button btnDownLeft;
         private System.Windows.Forms.Button btnDownRight;
         private System.Windows.Forms.Button btnTopLeft;
+        private System.Windows.Forms.Button btnMenu;
     }
 }

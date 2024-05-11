@@ -568,5 +568,11 @@ namespace ViscaControllerPtz
             Properties.Settings.Default["TiltSpeed"] = trackBar2.Value.ToString();
             Properties.Settings.Default.Save();
         }
+
+        private void btnMenu_Click(object sender, EventArgs e)
+        {
+            byte[] buff = { 0x81, 0x01, 0x06, 0x06, 0x02, 0xFF };
+            this.serialPort1.Write(buff, 0, buff.Length);
+        }
     }
 }
