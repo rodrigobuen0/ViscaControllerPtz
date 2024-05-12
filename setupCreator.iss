@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "PTZ Controller"
-#define MyAppVersion "1.0.0.0"
+#define MyAppVersion "1.0.2.0"
 #define MyAppPublisher "Rodrigo Bueno"
 #define MyAppURL "https://rodrigobueno.dev"
 #define MyAppExeName "ViscaControllerPtz.exe"
