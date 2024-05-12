@@ -35,6 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnMenu = new System.Windows.Forms.Button();
             this.btnDownLeft = new System.Windows.Forms.Button();
             this.btnDownRight = new System.Windows.Forms.Button();
             this.btnTopLeft = new System.Windows.Forms.Button();
@@ -72,7 +73,9 @@
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnMenu = new System.Windows.Forms.Button();
+            this.btnFocusAuto = new System.Windows.Forms.Button();
+            this.btnFocusNear = new System.Windows.Forms.Button();
+            this.btnFocusFar = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -147,6 +150,16 @@
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Control";
+            // 
+            // btnMenu
+            // 
+            this.btnMenu.Location = new System.Drawing.Point(213, 12);
+            this.btnMenu.Name = "btnMenu";
+            this.btnMenu.Size = new System.Drawing.Size(85, 31);
+            this.btnMenu.TabIndex = 15;
+            this.btnMenu.Text = "MENU";
+            this.btnMenu.UseVisualStyleBackColor = true;
+            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
             // 
             // btnDownLeft
             // 
@@ -550,22 +563,45 @@
             this.label3.TabIndex = 15;
             this.label3.Text = "TILT Speed";
             // 
-            // btnMenu
+            // btnFocusAuto
             // 
-            this.btnMenu.Location = new System.Drawing.Point(213, 12);
-            this.btnMenu.Name = "btnMenu";
-            this.btnMenu.Size = new System.Drawing.Size(85, 31);
-            this.btnMenu.TabIndex = 15;
-            this.btnMenu.Text = "MENU";
-            this.btnMenu.UseVisualStyleBackColor = true;
-            this.btnMenu.Click += new System.EventHandler(this.btnMenu_Click);
+            this.btnFocusAuto.Location = new System.Drawing.Point(418, 300);
+            this.btnFocusAuto.Name = "btnFocusAuto";
+            this.btnFocusAuto.Size = new System.Drawing.Size(74, 40);
+            this.btnFocusAuto.TabIndex = 21;
+            this.btnFocusAuto.Text = "Focus Auto";
+            this.btnFocusAuto.UseVisualStyleBackColor = true;
+            this.btnFocusAuto.Click += new System.EventHandler(this.btnFocusAuto_Click);
+            // 
+            // btnFocusNear
+            // 
+            this.btnFocusNear.Location = new System.Drawing.Point(499, 300);
+            this.btnFocusNear.Name = "btnFocusNear";
+            this.btnFocusNear.Size = new System.Drawing.Size(74, 40);
+            this.btnFocusNear.TabIndex = 22;
+            this.btnFocusNear.Text = "Focus Near";
+            this.btnFocusNear.UseVisualStyleBackColor = true;
+            this.btnFocusNear.Click += new System.EventHandler(this.btnFocusNear_Click);
+            // 
+            // btnFocusFar
+            // 
+            this.btnFocusFar.Location = new System.Drawing.Point(579, 300);
+            this.btnFocusFar.Name = "btnFocusFar";
+            this.btnFocusFar.Size = new System.Drawing.Size(74, 40);
+            this.btnFocusFar.TabIndex = 23;
+            this.btnFocusFar.Text = "Focus Far";
+            this.btnFocusFar.UseVisualStyleBackColor = true;
+            this.btnFocusFar.Click += new System.EventHandler(this.btnFocusFar_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(731, 362);
+            this.Controls.Add(this.btnFocusFar);
+            this.Controls.Add(this.btnFocusNear);
             this.Controls.Add(this.label3);
+            this.Controls.Add(this.btnFocusAuto);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.trackBar1);
@@ -638,5 +674,8 @@
         private System.Windows.Forms.Button btnDownRight;
         private System.Windows.Forms.Button btnTopLeft;
         private System.Windows.Forms.Button btnMenu;
+        private System.Windows.Forms.Button btnFocusAuto;
+        private System.Windows.Forms.Button btnFocusNear;
+        private System.Windows.Forms.Button btnFocusFar;
     }
 }

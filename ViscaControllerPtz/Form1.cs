@@ -469,7 +469,7 @@ namespace ViscaControllerPtz
 
         private void button15_Click(object sender, EventArgs e)
         {
-            byte[] buff = { 0x81, 0x01, 0x04, 0x3F, 0x03, 0x04, 0xFF };
+            byte[] buff = { 0x81, 0x01, 0x04, 0x3F, 0x02, 0x03, 0xFF };
             this.serialPort1.Write(buff, 0, buff.Length);
         }
 
@@ -572,6 +572,24 @@ namespace ViscaControllerPtz
         private void btnMenu_Click(object sender, EventArgs e)
         {
             byte[] buff = { 0x81, 0x01, 0x06, 0x06, 0x02, 0xFF };
+            this.serialPort1.Write(buff, 0, buff.Length);
+        }
+
+        private void btnFocusAuto_Click(object sender, EventArgs e)
+        {
+            byte[] buff = { 0x81, 0x01, 0x04, 0x38, 0x02, 0xFF };
+            this.serialPort1.Write(buff, 0, buff.Length);
+        }
+
+        private void btnFocusNear_Click(object sender, EventArgs e)
+        {
+            byte[] buff = { 0x81, 0x01, 0x04, 0x08, 0x03, 0xFF };
+            this.serialPort1.Write(buff, 0, buff.Length);
+        }
+
+        private void btnFocusFar_Click(object sender, EventArgs e)
+        {
+            byte[] buff = { 0x81, 0x01, 0x04, 0x08, 0x02, 0xFF };
             this.serialPort1.Write(buff, 0, buff.Length);
         }
     }
